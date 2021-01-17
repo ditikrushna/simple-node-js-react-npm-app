@@ -1,26 +1,24 @@
 pipeline {
     agent any 
     stages {
-        stage('build') { 
+        stage('Installing NPM Packages') { 
             steps {
                 echo 'Node Modules Installation...'
                 bat 'npm install'
             }
-        }
-        stage('test') { 
-            steps {
-                echo 'Building App..'
-                bat 'set "REACT_APP_TESTVAR=abcdef" && npm run build'
+        }stage('Building React Application'){
+            steps{
+            echo "generate files and build folder"
+            bat "npm run build"
             }
         }
-        stage('deploy') { 
+        stage('deploy to apache ') { 
             steps {
-                echo 'Docker Config'
-                bat "docker pull httpd"
-                bat "docker build -t reactapp"
-                bat "docker run --name dockerreact -p 5000:80 reactapp"
+                echo 'deploying react app to apache web server'
+                bat "xcopy /s build C:\\Apache24\\htdocs"
             }
         }
     }
 }
+
 
